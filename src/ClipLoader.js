@@ -1,111 +1,88 @@
-var React = require('react');
-var assign = require('domkit/appendVendorPrefix');
-var insertKeyframesRule = require('domkit/insertKeyframesRule');
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import appendVendorPrefix from 'domkit/appendVendorPrefix';
+import insertKeyframesRule from 'domkit/insertKeyframesRule';
 
-/**
- * @type {Object}
- */
-var keyframes = {
-    '0%': {
-        transform: 'rotate(0deg) scale(1)'
-    },
-    '50%': {
-        transform: 'rotate(180deg) scale(0.8)'
-    },
-    '100%': {
-        transform: 'rotate(360deg) scale(1)'
+class ClipLoader extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.keyframes = {
+      '0%': {
+        transform: 'rotate(0deg) scale(1)',
+      },
+      '50%': {
+        transform: 'rotate(180deg) scale(0.8)',
+      },
+      '100%': {
+        transform: 'rotate(360deg) scale(1)',
+      },
+    };
+
+    this.animationName = insertKeyframesRule(this.keyframes);
+  }
+
+  getBallStyle() {
+    return {
+      width: this.props.size,
+      height: this.props.size,
+      border: '2px solid',
+      borderColor: this.props.color,
+      borderBottomColor: 'transparent',
+      borderRadius: '100%',
+      background: 'transparent !important',
+      verticalAlign: this.props.verticalAlign,
+    };
+  }
+
+  getAnimationStyle() {
+    const animation = [this.animationName, '0.75s', '0s', 'infinite', 'linear'].join(' ');
+    const animationFillMode = 'both';
+
+    return {
+      animation,
+      animationFillMode,
+    };
+  }
+
+  getStyle(i) {
+    return appendVendorPrefix(
+      this.getBallStyle(i),
+      this.getAnimationStyle(i),
+      {
+        display: 'inline-block',
+      },
+    );
+  }
+
+  render() {
+    const { loading, id, className } = this.props;
+
+    if (loading) {
+      return (
+        <div id={id} className={className}>
+          <div style={this.getStyle()} />
+        </div>
+      );
     }
+
+    return null;
+  }
+}
+
+ClipLoader.defaultProps = {
+  color: '#ffffff',
+  loading: true,
+  size: '35px',
 };
 
-/**
- * @type {String}
- */
-var animationName = insertKeyframesRule(keyframes);
+ClipLoader.propTypes = {
+  className: PropTypes.string,
+  color: PropTypes.string,
+  id: PropTypes.string,
+  loading: PropTypes.bool,
+  size: PropTypes.string,
+  verticalAlign: PropTypes.string,
+};
 
-var Loader = React.createClass({
-    /**
-     * @type {Object}
-     */
-    propTypes: {
-        loading: React.PropTypes.bool,
-        color: React.PropTypes.string,
-        size: React.PropTypes.string
-    },
-
-    /**
-     * @return {Object}
-     */
-    getDefaultProps: function() {
-        return {
-            loading: true,
-            color: '#ffffff',
-            size: '35px'
-        };
-    },
-
-    /**
-     * @return {Object}
-     */
-    getBallStyle: function() {
-        return {
-            width: this.props.size,
-            height: this.props.size,
-            border: '2px solid',
-            borderColor: this.props.color,
-            borderBottomColor: 'transparent',
-            borderRadius: '100%',
-            background: 'transparent !important',
-            verticalAlign: this.props.verticalAlign
-        };
-    },
-
-    /**
-     * @param  {Number} i
-     * @return {Object}
-     */
-    getAnimationStyle: function(i) {
-        var animation = [animationName, '0.75s', '0s', 'infinite', 'linear'].join(' ');
-        var animationFillMode = 'both';
-
-        return {
-            animation: animation,
-            animationFillMode: animationFillMode
-        };
-    },
-
-    /**
-     * @param  {Number} i
-     * @return {Object}
-     */
-    getStyle: function(i) {
-        return assign(
-            this.getBallStyle(i),
-            this.getAnimationStyle(i),
-            {
-                display: 'inline-block'
-            }
-        );
-    },
-
-    /**
-     * @param  {Boolean} loading
-     * @return {ReactComponent || null}
-     */
-    renderLoader: function(loading) {
-        if (loading) {
-            return (
-                <div id={this.props.id} className={this.props.className}>
-                    <div style={this.getStyle()}></div>
-                </div>
-            );
-        }
-
-        return null;
-    },
-
-    render: function() {
-        return this.renderLoader(this.props.loading);
-    }
-});
-
-module.exports = Loader;
+export default ClipLoader;
