@@ -1,7 +1,7 @@
-Halogen [![npm version](https://badge.fury.io/js/halogen.svg)](http://badge.fury.io/js/halogen)
+Halogen
 =======
 
-[![Pair on this](https://tf-assets-staging.s3.amazonaws.com/badges/thinkful_repo_badge.svg)](http://start.thinkful.com/react/?utm_source=github&utm_medium=badge&utm_campaign=halogen)
+### Fork of [yuanyan/halogen](https://github.com/yuanyan/halogen) for modern React support
 
 A collection of loading spinners with React.js.
 
@@ -23,25 +23,34 @@ Then open [`localhost:9999`](http://localhost:9999) in a browser.
 
 ## Installation
 
-The easiest way to use `halogen` is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), etc).
+The easiest way to use `halogen` is to install it from NPM and include it in your own React build process.
 
-You can also use the standalone build by including `dist/halogen.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
+You can also use the standalone build by including `dist/halogen.js` in your page. 
+If you use this, make sure you have already included React, and it is available as a global variable.
 
 ```
-npm install halogen --save
+yarn add @dsisolutions/halogen
+```
+
+or 
+
+```
+npm install @dsisolutions/halogen --save
 ```
 
 ## Usage
 
 ```javascript
-var Loader = require('halogen/PulseLoader');
-var Example = React.createClass({
-  render: function() {
-    return (
-      <Loader color="#26A65B" size="16px" margin="4px"/>
-    );
-  }
-});
+import React from 'react';
+import Loader from '@dsisolutions/halogen/PulseLoader';
+
+const Example = () => {
+  return (
+    <Loader color="#26A65B" size="16px" margin="4px"/>
+  );
+};
+
+export default Example;
 ```
 
 ## Loaders
