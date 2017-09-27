@@ -1,109 +1,89 @@
-var React = require('react');
-var assign = require('domkit/appendVendorPrefix');
-var insertKeyframesRule = require('domkit/insertKeyframesRule');
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import appendVendorPrefix from 'domkit/appendVendorPrefix';
+import insertKeyframesRule from 'domkit/insertKeyframesRule';
 
-/**
- * @type {Object}
- */
-var keyframes = {
-    '50%': {
+class BeatLoader extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.keyframes = {
+      '50%': {
         transform: 'scale(0.75)',
-        opacity: 0.2
-    },
-    '100%': {
+        opacity: 0.2,
+      },
+      '100%': {
         transform: 'scale(1)',
-        opacity: 1
+        opacity: 1,
+      },
+    };
+
+    this.animationName = insertKeyframesRule(this.keyframes);
+  }
+
+  getBallStyle() {
+    return {
+      backgroundColor: this.props.color,
+      width: this.props.size,
+      height: this.props.size,
+      margin: this.props.margin,
+      borderRadius: '100%',
+      verticalAlign: this.props.verticalAlign,
+    };
+  }
+
+  getAnimationStyle() {
+    const animation = [this.animationName, '0.7s', i % 2 ? '0s' : '0.35s', 'infinite', 'linear'].join(' ');
+    const animationFillMode = 'both';
+
+    return {
+      animation,
+      animationFillMode,
+    };
+  }
+
+  getStyle(i) {
+    return appendVendorPrefix(
+      this.getBallStyle(i),
+      this.getAnimationStyle(i),
+      {
+        display: 'inline-block',
+      },
+    );
+  }
+
+  render() {
+    const { loading, id, className } = this.props;
+
+    if (loading) {
+      return (
+        <div id={id} className={className}>
+          <div style={this.getStyle(1)} />
+          <div style={this.getStyle(2)} />
+          <div style={this.getStyle(3)} />
+        </div>
+      );
     }
+
+    return null;
+  }
+}
+
+BeatLoader.defaultProps = {
+  loading: true,
+  color: '#ffffff',
+  size: '15px',
+  margin: '2px',
 };
 
-var animationName = insertKeyframesRule(keyframes);
+BeatLoader.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  loading: React.PropTypes.bool,
+  color: React.PropTypes.string,
+  size: React.PropTypes.string,
+  margin: React.PropTypes.string,
+  verticalAlign: PropTypes.string,
+};
 
-var Loader = React.createClass({
-    /**
-     * @type {Object}
-     */
-    propTypes: {
-        loading: React.PropTypes.bool,
-        color: React.PropTypes.string,
-        size: React.PropTypes.string,
-        margin: React.PropTypes.string
-    },
-
-    /**
-     * @return {Object}
-     */
-    getDefaultProps: function() {
-        return {
-            loading: true,
-            color: '#ffffff',
-            size: '15px',
-            margin: '2px'
-        };
-    },
-
-    /**
-     * @return {Object}
-     */
-    getBallStyle: function() {
-        return {
-            backgroundColor: this.props.color,
-            width: this.props.size,
-            height: this.props.size,
-            margin: this.props.margin,
-            borderRadius: '100%',
-            verticalAlign: this.props.verticalAlign
-        }
-    },
-
-    /**
-     * @param  {Number} i
-     * @return {Object}
-     */
-    getAnimationStyle: function(i) {
-        var animation = [animationName, '0.7s', i%2? '0s': '0.35s', 'infinite', 'linear'].join(' ');
-        var animationFillMode = 'both';
-
-        return {
-            animation: animation,
-            animationFillMode: animationFillMode
-        }
-    },
-
-    /**
-     * @param  {Number} i
-     * @return {Object}
-     */
-    getStyle: function(i) {
-        return assign(
-            this.getBallStyle(i),
-            this.getAnimationStyle(i),
-            {
-                display: 'inline-block'
-            }
-        )
-    },
-
-    /**
-     * @param  {Boolean} loading
-     * @return {ReactComponent || null}
-     */
-    renderLoader: function(loading) {
-        if (loading) {
-            return (
-                <div id={this.props.id} className={this.props.className}>
-                    <div style={this.getStyle(1)}></div>
-                    <div style={this.getStyle(2)}></div>
-                    <div style={this.getStyle(3)}></div>
-                </div>
-            );
-        }
-
-        return null;
-    },
-
-    render: function() {
-        return this.renderLoader(this.props.loading);
-    }
-});
-
-module.exports = Loader;
+export default BeatLoader;
