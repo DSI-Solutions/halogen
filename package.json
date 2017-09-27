@@ -1,5 +1,5 @@
 {
-  "name": "halogen",
+  "name": "@dsisolutions/halogen",
   "version": "0.2.0",
   "description": "A collection of loading spinners with React.js",
   "main": "Halogen.js",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yuanyan/halogen.git"
+    "url": "git+https://github.com/DSI-Solutions/halogen.git"
   },
   "dependencies": {
     "domkit": "0.0.1"
@@ -57,5 +57,12 @@
     "loader",
     "spinner",
     "halogen"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/DSI-Solutions/halogen/issues"
+  },
+  "homepage": "https://github.com/DSI-Solutions/halogen#readme",
+  "directories": {
+    "example": "example"
+  }
 }
