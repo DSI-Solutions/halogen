@@ -300,7 +300,7 @@ gulp.task('build:npm', buildToRoot);
 gulp.task('publish:npm', ['build:npm'], function(done) {
 
   require('child_process')
-    .spawn('npm', ['publish'], { stdio: 'inherit' })
+    .spawn('npm', ['publish', '--access', 'public'], { stdio: 'inherit' })
     .on('close', done);
 });
 
@@ -317,4 +317,4 @@ gulp.task('publish:examples', ['build:examples'], function() {
   return gulp.src(EXAMPLE_DIST_PATH + '/**/*').pipe(deploy());
 });
 
-gulp.task('release', ['publish:tag', 'release:npm', 'publish:examples']);
+gulp.task('release', ['publish:tag', 'release:npm']);
