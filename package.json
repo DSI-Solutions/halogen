@@ -1,6 +1,6 @@
 {
   "name": "@dsisolutions/halogen",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A collection of loading spinners with React.js",
   "main": "Halogen.js",
   "author": "Yuanyan Cao",
